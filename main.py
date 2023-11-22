@@ -14,7 +14,7 @@ async def read_main():
 @app.get(f"/table/{table_population}")
 async def read_main():
     res = await launcher_for_table(url+table_population)
-    return res
+    return {"result": res}
 
 
 @app.get(f"/table/{table_undernourishment}")
