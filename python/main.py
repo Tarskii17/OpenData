@@ -1,3 +1,4 @@
+
 from fastapi import FastAPI
 from browser import launcher_for_data, launcher_for_table
 from consts import url, json_columns_data, table_population, table_undernourishment
@@ -21,3 +22,5 @@ async def read_main():
 async def read_main():
     res = await launcher_for_table(url+table_undernourishment)
     return {"result": res}
+
+print("run")
