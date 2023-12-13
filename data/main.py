@@ -22,5 +22,3 @@ async def read_main():
 async def read_main():
     res = await launcher_for_table(url+table_undernourishment)
     return {"result": res}
-
-print("run")
