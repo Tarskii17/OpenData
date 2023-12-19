@@ -17,6 +17,10 @@
 	<title>Open Data Poject</title>
 
 	<link href="css/app.css" rel="stylesheet">
+	<script src="https://cdn.jsdelivr.net/npm/svg-pan-zoom@3.6.1/dist/svg-pan-zoom.min.js"></script>
+    <link href="css/demo.css" rel="stylesheet" />
+    <link href="dist/svgMap.css" rel="stylesheet" />
+    <script src="dist/svgMap.js"></script>
 	<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
 </head>
 
@@ -52,10 +56,9 @@
 														</div>
 													</div>
 												</div>
-												<h1 class="mt-1 mb-3">null</h1>
+												<h1 class="mt-1 mb-3"><div id="undernourishmentValue"></div></h1>
 												<div class="mb-0">
-													<span class="text-danger"> <i class="mdi mdi-arrow-bottom-right"></i> -3.65% </span>
-													<span class="text-muted">Since last week</span>
+													<span class="text-muted"><div class="currentDate"></div></span>
 												</div>
 											</div>
 										</div>
@@ -72,10 +75,9 @@
 														</div>
 													</div>
 												</div>
-												<h1 class="mt-1 mb-3">null</h1>
+												<h1 class="mt-1 mb-3"><div id="obesityValue"></div></h1>
 												<div class="mb-0">
-													<span class="text-success"> <i class="mdi mdi-arrow-bottom-right"></i> 5.25% </span>
-													<span class="text-muted">Since last week</span>
+													<span class="text-muted"><div class="currentDate"></div></span>
 												</div>
 											</div>
 										</div>
@@ -94,10 +96,9 @@
 														</div>
 													</div>
 												</div>
-												<h1 class="mt-1 mb-3">null</h1>
+												<h1 class="mt-1 mb-3"><div id="weightlossValue"></div></h1>
 												<div class="mb-0">
-													<span class="text-success"> <i class="mdi mdi-arrow-bottom-right"></i> 6.65% </span>
-													<span class="text-muted">Since last week</span>
+													<span class="text-muted"><div class="currentDate"></div></span>
 												</div>
 											</div>
 										</div>
@@ -114,10 +115,9 @@
 														</div>
 													</div>
 												</div>
-												<h1 class="mt-1 mb-3">null</h1>
+												<h1 class="mt-1 mb-3"><div id="populationValue"></div></h1>
 												<div class="mb-0">
-													<span class="text-danger"> <i class="mdi mdi-arrow-bottom-right"></i> -2.25% </span>
-													<span class="text-muted">Since last week</span>
+													<span class="text-muted"><div class="currentDate"></div></span>
 												</div>
 											</div>
 										</div>
@@ -128,25 +128,27 @@
 					</div>
 
 					<div class="row">
-						<div class="col-12 col-md-12 col-xxl-6 d-flex order-3 order-xxl-2">
+						<div class="col-12 col-md-12 col-xxl-12 d-flex order-3 order-xxl-2">
 							<div class="card flex-fill w-100">
-								<div class="card-header">
-
-									<h5 class="card-title mb-0">Real-Time</h5>
+								<div class="card-header" style="padding: 3rem 2rem;">
+									<h3 class="card-title mb-0" style="font-size: 2em;" >Population density</h3>
 								</div>
 								<div class="card-body px-4">
-									<div id="world_map" style="height:350px;"></div>
+									<div class="demo-container" style="padding: 1rem 8rem;">
+										<div id="svgMapPopulation"></div>
+									</div>
 								</div>
 							</div>
 						</div>
-						<div class="col-12 col-md-12 col-xxl-6 d-flex order-3 order-xxl-2">
+						<div class="col-12 col-md-12 col-xxl-12 d-flex order-3 order-xxl-2">
 							<div class="card flex-fill w-100">
-								<div class="card-header">
-
-									<h5 class="card-title mb-0">Real-Time</h5>
+								<div class="card-header" style="padding: 3rem 2rem;">
+									<h3 class="card-title mb-0" style="font-size: 2em;" >Population of Undernourishment</h3>
 								</div>
 								<div class="card-body px-4">
-									<div id="world_map2" style="height:350px;"></div>
+									<div class="demo-container" style="padding: 1rem 8rem;">
+										<div id="svgMapUN"></div>
+									</div>
 								</div>
 							</div>
 						</div>
@@ -183,232 +185,420 @@
 	</div>
 
 	<script src="js/app.js"></script>
-<!--
 	<script>
-		document.addEventListener("DOMContentLoaded", function() {
-			var ctx = document.getElementById("chartjs-dashboard-line").getContext("2d");
-			var gradient = ctx.createLinearGradient(0, 0, 0, 225);
-			gradient.addColorStop(0, "rgba(215, 227, 244, 1)");
-			gradient.addColorStop(1, "rgba(215, 227, 244, 0)");
-			// Line chart
-			new Chart(document.getElementById("chartjs-dashboard-line"), {
-				type: "line",
-				data: {
-					labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
-					datasets: [{
-						label: "Sales ($)",
-						fill: true,
-						backgroundColor: gradient,
-						borderColor: window.theme.primary,
-						data: [
-							2115,
-							1562,
-							1584,
-							1892,
-							1587,
-							1923,
-							2566,
-							2448,
-							2805,
-							3438,
-							2917,
-							3327
-						]
-					}]
-				},
-				options: {
-					maintainAspectRatio: false,
-					legend: {
-						display: false
-					},
-					tooltips: {
-						intersect: false
-					},
-					hover: {
-						intersect: true
-					},
-					plugins: {
-						filler: {
-							propagate: false
-						}
-					},
-					scales: {
-						xAxes: [{
-							reverse: true,
-							gridLines: {
-								color: "rgba(0,0,0,0.0)"
-							}
-						}],
-						yAxes: [{
-							ticks: {
-								stepSize: 1000
-							},
-							display: true,
-							borderDash: [3, 3],
-							gridLines: {
-								color: "rgba(0,0,0,0.0)"
-							}
-						}]
-					}
-				}
-			});
+		// 현재 날짜를 yyyy.mm.dd 형식으로 반환하는 함수
+		function getFormattedDate() {
+			const today = new Date();
+			const year = today.getFullYear();
+			const month = String(today.getMonth() + 1).padStart(2, '0');
+			const day = String(today.getDate()).padStart(2, '0');
+			const hours = String(today.getHours()).padStart(2, '0');
+    		const minutes = String(today.getMinutes()).padStart(2, '0');
+    		return `${year}.${month}.${day} ${hours}:${minutes}`;
+		}
+		
+		// 현재 날짜를 가져와서 HTML에 표시
+		const currentDateElements = document.querySelectorAll(".currentDate");
+		currentDateElements.forEach(element => {
+    		element.innerHTML = getFormattedDate();
 		});
 	</script>
+
+<script>
+	// AJAX 함수 정의
+	function fetchData(url, callback) {
+		var xhr = new XMLHttpRequest();
+		xhr.onreadystatechange = function() {
+			if (xhr.readyState === 4 && xhr.status === 200) {
+				var data = JSON.parse(xhr.responseText);
+				callback(data);
+			}
+		};
+		xhr.open("GET", url, true);
+		xhr.send();
+	}
 	
-	<script>
-		document.addEventListener("DOMContentLoaded", function() {
-			// Pie chart
-			new Chart(document.getElementById("chartjs-dashboard-pie"), {
-				type: "pie",
-				data: {
-					labels: ["Chrome", "Firefox", "IE"],
-					datasets: [{
-						data: [4306, 3801, 1689],
-						backgroundColor: [
-							window.theme.primary,
-							window.theme.warning,
-							window.theme.danger
-						],
-						borderWidth: 5
-					}]
-				},
-				options: {
-					responsive: !window.MSInputMethodContext,
-					maintainAspectRatio: false,
-					legend: {
-						display: false
-					},
-					cutoutPercentage: 75
-				}
-			});
-		});
+	// Main Counter 데이터 가져오기
+	fetchData("http://127.0.0.1:8000/maincounter-number", function(result) {
+		var undernourishmentValue = result.worldometer.undernourishment;
+		var obesityValue = result.worldometer.obesity;
+		var weightlossValue = result.worldometer["weight-loss"];
+		var populationValue = result.worldometer["world-population"];
+	
+		document.getElementById("undernourishmentValue").innerHTML =  undernourishmentValue;
+		document.getElementById("obesityValue").innerHTML =  obesityValue;
+		document.getElementById("weightlossValue").innerHTML =  weightlossValue;
+		document.getElementById("populationValue").innerHTML =  populationValue;
+	});
+
+	function getCountryCode(countryName) {
+    var countryCodes = {
+        "Afghanistan": "AF",
+    "Åland Islands": "AX",
+    "Albania": "AL",
+    "Algeria": "DZ",
+    "American Samoa": "AS",
+    "Andorra": "AD",
+    "Angola": "AO",
+    "Anguilla": "AI",
+    "Antarctica": "AQ",
+    "Antigua and Barbuda": "AG",
+    "Argentina": "AR",
+    "Armenia": "AM",
+    "Aruba": "AW",
+    "Australia": "AU",
+    "Austria": "AT",
+    "Azerbaijan": "AZ",
+    "Bahamas": "BS",
+    "Bahrain": "BH",
+    "Bangladesh": "BD",
+    "Barbados": "BB",
+    "Belarus": "BY",
+    "Belgium": "BE",
+    "Belize": "BZ",
+    "Benin": "BJ",
+    "Bermuda": "BM",
+    "Bhutan": "BT",
+    "Bolivia": "BO",
+    "Bosnia and Herzegovina": "BA",
+    "Botswana": "BW",
+    "Brazil": "BR",
+    "British Indian Ocean Territory": "IO",
+    "British Virgin Islands": "VG",
+    "Brunei": "BN",
+    "Bulgaria": "BG",
+    "Burkina Faso": "BF",
+    "Burundi": "BI",
+    "Cambodia": "KH",
+    "Cameroon": "CM",
+    "Canada": "CA",
+    "Cabo Verde": "CV",
+    "Caribbean Netherlands": "BQ",
+    "Cayman Islands": "KY",
+    "Central African Republic": "CF",
+    "Chad": "TD",
+    "Chile": "CL",
+    "China": "CN",
+    "Christmas Island": "CX",
+    "Cocos Islands": "CC",
+    "Colombia": "CO",
+    "Comoros": "KM",
+    "Congo": "CG",
+    "Cook Islands": "CK",
+    "Costa Rica": "CR",
+    "Croatia": "HR",
+    "Cuba": "CU",
+    "Curaçao": "CW",
+    "Cyprus": "CY",
+    "Czech Republic (Czechia)": "CZ",
+    "DR Congo": "CD",
+    "Denmark": "DK",
+    "Djibouti": "DJ",
+    "Dominica": "DM",
+    "Dominican Republic": "DO",
+    "Ecuador": "EC",
+    "Egypt": "EG",
+    "El Salvador": "SV",
+    "Equatorial Guinea": "GQ",
+    "Eritrea": "ER",
+    "Estonia": "EE",
+    "Ethiopia": "ET",
+    "Falkland Islands": "FK",
+    "Faroe Islands": "FO",
+    "Micronesia": "FM",
+    "Fiji": "FJ",
+    "Finland": "FI",
+    "France": "FR",
+    "French Guiana": "GF",
+    "French Polynesia": "PF",
+    "French Southern Territories": "TF",
+    "Gabon": "GA",
+    "Gambia": "GM",
+    "Georgia": "GE",
+    "Germany": "DE",
+    "Ghana": "GH",
+    "Gibraltar": "GI",
+    "Greece": "GR",
+    "Greenland": "GL",
+    "Grenada": "GD",
+    "Guadeloupe": "GP",
+    "Guam": "GU",
+    "Guatemala": "GT",
+    "Guinea": "GN",
+    "Guinea-Bissau": "GW",
+    "Guyana": "GY",
+    "Haiti": "HT",
+    "Honduras": "HN",
+    "Hong Kong": "HK",
+    "Hungary": "HU",
+    "Iceland": "IS",
+    "India": "IN",
+    "Indonesia": "ID",
+    "Iran": "IR",
+    "Iraq": "IQ",
+    "Ireland": "IE",
+    "Isle of Man": "IM",
+    "Israel": "IL",
+    "Italy": "IT",
+    "Côte d'Ivoire": "CI",
+    "Jamaica": "JM",
+    "Japan": "JP",
+    "Jersey": "JE",
+    "Jordan": "JO",
+    "Kazakhstan": "KZ",
+    "Kenya": "KE",
+    "Kiribati": "KI",
+    "Kosovo": "XK",
+    "Kuwait": "KW",
+    "Kyrgyzstan": "KG",
+    "Laos": "LA",
+    "Latvia": "LV",
+    "Lebanon": "LB",
+    "Lesotho": "LS",
+    "Liberia": "LR",
+    "Libya": "LY",
+    "Liechtenstein": "LI",
+    "Lithuania": "LT",
+    "Luxembourg": "LU",
+    "Macao": "MO",
+    "North Macedonia": "MK",
+    "Madagascar": "MG",
+    "Malawi": "MW",
+    "Malaysia": "MY",
+    "Maldives": "MV",
+    "Mali": "ML",
+    "Malta": "MT",
+    "Marshall Islands": "MH",
+    "Martinique": "MQ",
+    "Mauritania": "MR",
+    "Mauritius": "MU",
+    "Mayotte": "YT",
+    "Mexico": "MX",
+    "Moldova": "MD",
+    "Monaco": "MC",
+    "Mongolia": "MN",
+    "Montenegro": "ME",
+    "Montserrat": "MS",
+    "Morocco": "MA",
+    "Mozambique": "MZ",
+    "Myanmar": "MM",
+    "Namibia": "NA",
+    "Nauru": "NR",
+    "Nepal": "NP",
+    "Netherlands": "NL",
+    "New Caledonia": "NC",
+    "New Zealand": "NZ",
+    "Nicaragua": "NI",
+    "Niger": "NE",
+    "Nigeria": "NG",
+    "Niue": "NU",
+    "Norfolk Island": "NF",
+    "North Korea": "KP",
+    "Northern Mariana Islands": "MP",
+    "Norway": "NO",
+    "Oman": "OM",
+    "Pakistan": "PK",
+    "Palau": "PW",
+    "State of Palestine": "PS",
+    "Panama": "PA",
+    "Papua New Guinea": "PG",
+    "Paraguay": "PY",
+    "Peru": "PE",
+    "Philippines": "PH",
+    "Pitcairn Islands": "PN",
+    "Poland": "PL",
+    "Portugal": "PT",
+    "Puerto Rico": "PR",
+    "Qatar": "QA",
+    "Réunion": "RE",
+    "Romania": "RO",
+    "Russia": "RU",
+    "Rwanda": "RW",
+    "Saint Helena": "SH",
+    "Saint Kitts & Nevis": "KN",
+    "Saint Lucia": "LC",
+    "Saint Pierre & Miquelon": "PM",
+    "St. Vincent & Grenadines": "VC",
+    "Samoa": "WS",
+    "San Marino": "SM",
+    "Sao Tome & Principe": "ST",
+    "Saudi Arabia": "SA",
+    "Senegal": "SN",
+    "Serbia": "RS",
+    "Seychelles": "SC",
+    "Sierra Leone": "SL",
+    "Singapore": "SG",
+    "Sint Maarten": "SX",
+    "Slovakia": "SK",
+    "Slovenia": "SI",
+    "Solomon Islands": "SB",
+    "Somalia": "SO",
+    "South Africa": "ZA",
+    "South Georgia and the South Sandwich Islands": "GS",
+    "South Korea": "KR",
+    "South Sudan": "SS",
+    "Spain": "ES",
+    "Sri Lanka": "LK",
+    "Sudan": "SD",
+    "Suriname": "SR",
+    "Svalbard and Jan Mayen": "SJ",
+    "Eswatini": "SZ",
+    "Sweden": "SE",
+    "Switzerland": "CH",
+    "Syria": "SY",
+    "Taiwan": "TW",
+    "Tajikistan": "TJ",
+    "Tanzania": "TZ",
+    "Thailand": "TH",
+    "Timor-Leste": "TL",
+    "Togo": "TG",
+    "Tokelau": "TK",
+    "Tonga": "TO",
+    "Trinidad and Tobago": "TT",
+    "Tunisia": "TN",
+    "Turkey": "TR",
+    "Turkmenistan": "TM",
+    "Turks and Caicos Islands": "TC",
+    "Tuvalu": "TV",
+    "Uganda": "UG",
+    "Ukraine": "UA",
+    "United Arab Emirates": "AE",
+    "United Kingdom": "GB",
+    "United States": "US",
+    "United States Minor Outlying Islands": "UM",
+    "United States Virgin Islands": "VI",
+    "Uruguay": "UY",
+    "Uzbekistan": "UZ",
+    "Vanuatu": "VU",
+    "Vatican City": "VA",
+    "Venezuela": "VE",
+    "Vietnam": "VN",
+    "Wallis & Futuna": "WF",
+    "Western Sahara": "EH",
+    "Yemen": "YE",
+    "Zambia": "ZM",
+    "Zimbabwe": "ZW"
+    };
+
+    return countryCodes[countryName] || null;
+}
+
+function transformDataForPopulation(realTimeData) {
+    var transformedData = { data: {}, applyData: 'worldShare', values: {} };
+
+    // 데이터 구조 설정
+    transformedData.data = {
+        area: {
+            name: 'Land Area (Km²)',
+            format: '{0} km<sup>2</sup>',
+            thousandSeparator: ','
+        },
+        population: {
+            name: 'Population (2023)',
+            thousandSeparator: ','
+        },
+        // 나머지 데이터 필드 정의
+        yearlyChange: { name: 'Yearly Change' },
+        netChange: { name: 'Net Change' },
+        migrants: { name: 'Migrants (net)' },
+        fertilityRate: { name: 'Fert. Rate' },
+        medianAge: { name: 'Med. Age' },
+        urbanPopulation: { name: 'Urban Pop %' },
+        worldShare: {
+            name: 'World Share',
+            format: '{0} %',
+            thresholdMax: 20,
+            thresholdMin: 0
+        }
+    };
+
+    // 실시간 데이터를 지정된 형식으로 변환
+    realTimeData.result.forEach(function (countryData) {
+        var countryCode = getCountryCode(countryData["Country (or dependency)"]);
+        if (countryCode) {
+            transformedData.values[countryCode] = {
+                area: Number(countryData["Land Area (Km²)"]) || 0,
+                population: Number(countryData["Population (2023)"]) || 0,
+                yearlyChange: countryData["Yearly Change"],
+                netChange: countryData["Net Change"],
+                migrants: countryData["Migrants (net)"],
+                fertilityRate: countryData["Fert. Rate"],
+                medianAge: countryData["Med. Age"],
+                urbanPopulation: countryData["Urban Pop %"],
+                worldShare: parseFloat(countryData["World Share"].replace("%", "")) || 0
+            };
+        }
+    });
+
+    return transformedData;
+}
+
+function transformDataForUN(realTimeData) {
+    var transformedData = { data: {}, applyData: 'percentPOP', values: {} };
+
+    // 데이터 구조 설정
+    transformedData.data = {
+        UNpopulation: {
+            name: 'Undernourished People',
+            thousandSeparator: ','
+        },
+        UNpopulation18: {
+            name: 'Undernourished People(2018)',
+            thousandSeparator: ','
+        },
+        percentPOP: {
+            name: 'Percnet of Population',
+            format: '{0} %',
+            thresholdMax: 71,
+            thresholdMin: 0
+        }
+    };
+
+    // 실시간 데이터를 지정된 형식으로 변환
+    realTimeData.result.forEach(function (countryData) {
+        var countryCode = getCountryCode(countryData["Country"]);
+        if (countryCode) {
+            transformedData.values[countryCode] = {
+                UNpopulation: Number(countryData["Undernourished People"]) || 0,
+                UNpopulation18: Number(countryData["Population (2018)"]) || 0,
+                percentPOP: parseFloat(countryData["Percent of Population"].replace("%", "")) || 0
+            };
+        }
+    });
+
+    return transformedData;
+}
+
+// 실시간 데이터를 가져와서 svgMap에 사용
+fetchData("http://127.0.0.1:8000/table/world-population/population-by-country", function(result) {
+    var dataForMap = transformDataForPopulation(result);
+    new svgMap({
+        targetElementID: 'svgMapPopulation',
+        data: dataForMap,
+        flagType: 'image',
+		colorMin: '#CED8F6',
+        colorMax: '#0040FF',
+        mouseWheelZoomEnabled: true,
+        mouseWheelZoomWithKey: true,
+        showContinentSelector: true
+    });
+});
+
+
+fetchData("http://127.0.0.1:8000/table/undernourishment", function(result) {
+    var dataForMap = transformDataForUN(result);
+    new svgMap({
+        targetElementID: 'svgMapUN',
+        data: dataForMap,
+        flagType: 'image',
+        mouseWheelZoomEnabled: true,
+        mouseWheelZoomWithKey: true,
+        showContinentSelector: true
+    });
+});
+	
 	</script>
-	<script>
-		document.addEventListener("DOMContentLoaded", function() {
-			// Bar chart
-			new Chart(document.getElementById("chartjs-dashboard-bar"), {
-				type: "bar",
-				data: {
-					labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
-					datasets: [{
-						label: "This year",
-						backgroundColor: window.theme.primary,
-						borderColor: window.theme.primary,
-						hoverBackgroundColor: window.theme.primary,
-						hoverBorderColor: window.theme.primary,
-						data: [54, 67, 41, 55, 62, 45, 55, 73, 60, 76, 48, 79],
-						barPercentage: .75,
-						categoryPercentage: .5
-					}]
-				},
-				options: {
-					maintainAspectRatio: false,
-					legend: {
-						display: false
-					},
-					scales: {
-						yAxes: [{
-							gridLines: {
-								display: false
-							},
-							stacked: false,
-							ticks: {
-								stepSize: 20
-							}
-						}],
-						xAxes: [{
-							stacked: false,
-							gridLines: {
-								color: "transparent"
-							}
-						}]
-					}
-				}
-			});
-		});
-	</script>
-	-->
-	<script>
-		document.addEventListener("DOMContentLoaded", function() {
-			var markers = [{
-					coords: [31.230391, 121.473701],
-					name: "Shanghai"
-				},
-				{
-					coords: [28.704060, 77.102493],
-					name: "Delhi"
-				},
-				{
-					coords: [6.524379, 3.379206],
-					name: "Lagos"
-				},
-				{
-					coords: [35.689487, 139.691711],
-					name: "Tokyo"
-				},
-				{
-					coords: [23.129110, 113.264381],
-					name: "Guangzhou"
-				},
-				{
-					coords: [40.7127837, -74.0059413],
-					name: "New York"
-				},
-				{
-					coords: [34.052235, -118.243683],
-					name: "Los Angeles"
-				},
-				{
-					coords: [41.878113, -87.629799],
-					name: "Chicago"
-				},
-				{
-					coords: [51.507351, -0.127758],
-					name: "London"
-				},
-				{
-					coords: [40.416775, -3.703790],
-					name: "Madrid "
-				}
-			];
-			var map = new jsVectorMap({
-				map: "world",
-				selector: "#world_map",
-				zoomButtons: true,
-				markers: markers,
-				markerStyle: {
-					initial: {
-						r: 9,
-						strokeWidth: 7,
-						stokeOpacity: .4,
-						fill: window.theme.primary
-					},
-					hover: {
-						fill: window.theme.primary,
-						stroke: window.theme.primary
-					}
-				},
-				zoomOnScroll: false
-			});
-			window.addEventListener("resize", () => {
-				map.updateSize();
-			});
-		});
-	</script>
-	<!--
-	<script>
-		document.addEventListener("DOMContentLoaded", function() {
-			var date = new Date(Date.now() - 5 * 24 * 60 * 60 * 1000);
-			var defaultDate = date.getUTCFullYear() + "-" + (date.getUTCMonth() + 1) + "-" + date.getUTCDate();
-			document.getElementById("datetimepicker-dashboard").flatpickr({
-				inline: true,
-				prevArrow: "<span title=\"Previous month\">&laquo;</span>",
-				nextArrow: "<span title=\"Next month\">&raquo;</span>",
-				defaultDate: defaultDate
-			});
-		});
-	</script>
-	-->
+
 
 </body>
 
