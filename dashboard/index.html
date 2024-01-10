@@ -47,7 +47,7 @@
 											<div class="card-body">
 												<div class="row">
 													<div class="col mt-0">
-														<h5 class="card-title">Undernourishment</h5>
+														<h5 class="card-title">Population</h5>
 													</div>
 
 													<div class="col-auto">
@@ -56,7 +56,7 @@
 														</div>
 													</div>
 												</div>
-												<h1 class="mt-1 mb-3"><div id="undernourishmentValue"></div></h1>
+												<h1 class="mt-1 mb-3"><div id="populationValue"></div></h1>
 												<div class="mb-0">
 													<span class="text-muted"><div class="currentDate"></div></span>
 												</div>
@@ -77,7 +77,7 @@
 												</div>
 												<h1 class="mt-1 mb-3"><div id="obesityValue"></div></h1>
 												<div class="mb-0">
-													<span class="text-muted"><div class="currentDate"></div></span>
+													<span class="text-muted"><div id="obesityRate"></div></span>
 												</div>
 											</div>
 										</div>
@@ -87,26 +87,7 @@
 											<div class="card-body">
 												<div class="row">
 													<div class="col mt-0">
-														<h5 class="card-title">Weight Loss</h5>
-													</div>
-
-													<div class="col-auto">
-														<div class="stat text-primary">
-															<i class="align-middle" data-feather="dollar-sign"></i>
-														</div>
-													</div>
-												</div>
-												<h1 class="mt-1 mb-3"><div id="weightlossValue"></div></h1>
-												<div class="mb-0">
-													<span class="text-muted"><div class="currentDate"></div></span>
-												</div>
-											</div>
-										</div>
-										<div class="card">
-											<div class="card-body">
-												<div class="row">
-													<div class="col mt-0">
-														<h5 class="card-title">Population</h5>
+														<h5 class="card-title">Overweight</h5>
 													</div>
 
 													<div class="col-auto">
@@ -115,9 +96,28 @@
 														</div>
 													</div>
 												</div>
-												<h1 class="mt-1 mb-3"><div id="populationValue"></div></h1>
+												<h1 class="mt-1 mb-3"><div id="weightlossValue"></div></h1>
 												<div class="mb-0">
-													<span class="text-muted"><div class="currentDate"></div></span>
+													<span class="text-muted"><div id = "weightlossRate"></div></span>
+												</div>
+											</div>
+										</div>
+										<div class="card">
+											<div class="card-body">
+												<div class="row">
+													<div class="col mt-0">
+														<h5 class="card-title">Undernourishment</h5>
+													</div>
+
+													<div class="col-auto">
+														<div class="stat text-primary">
+															<i class="align-middle" data-feather="users"></i>
+														</div>
+													</div>
+												</div>
+												<h1 class="mt-1 mb-3"><div id="undernourishmentValue"></div></h1>
+												<div class="mb-0">
+													<span class="text-muted"><div id="undernourishmentRate"></div></span>
 												</div>
 											</div>
 										</div>
@@ -186,7 +186,7 @@
 
 	<script src="js/app.js"></script>
 	<script>
-		// 현재 날짜를 yyyy.mm.dd 형식으로 반환하는 함수
+        //Get the current date and time and display it in HTML
 		function getFormattedDate() {
 			const today = new Date();
 			const year = today.getFullYear();
@@ -197,7 +197,6 @@
     		return `${year}.${month}.${day} ${hours}:${minutes}`;
 		}
 		
-		// 현재 날짜를 가져와서 HTML에 표시
 		const currentDateElements = document.querySelectorAll(".currentDate");
 		currentDateElements.forEach(element => {
     		element.innerHTML = getFormattedDate();
@@ -205,12 +204,12 @@
 	</script>
 
 <script>
-	// AJAX 함수 정의
+	// AJAX function definition
 	function fetchData(url, callback) {
 		var xhr = new XMLHttpRequest();
 		xhr.onreadystatechange = function() {
 			if (xhr.readyState === 4 && xhr.status === 200) {
-				var data = JSON.parse(xhr.responseText);
+				var data = JSON.parse(xhr.responseText); //Transform the data to json form
 				callback(data);
 			}
 		};
@@ -218,7 +217,7 @@
 		xhr.send();
 	}
 	
-	// Main Counter 데이터 가져오기
+	// Get main datas
 	fetchData("http://127.0.0.1:8000/maincounter-number", function(result) {
 		var undernourishmentValue = result.worldometer.undernourishment;
 		var obesityValue = result.worldometer.obesity;
@@ -229,9 +228,25 @@
 		document.getElementById("obesityValue").innerHTML =  obesityValue;
 		document.getElementById("weightlossValue").innerHTML =  weightlossValue;
 		document.getElementById("populationValue").innerHTML =  populationValue;
+
+        var undernourishmentValueNum = BigInt(undernourishmentValue.replace(/,/g, ''));
+        var obesityValueNum = BigInt(obesityValue.replace(/,/g, ''));
+        var weightlossValueNum = BigInt(weightlossValue.replace(/,/g, ''));
+        var populationValueNum = BigInt(populationValue.replace(/,/g, ''));
+
+        var undernourishmentRate = Number(undernourishmentValueNum) / Number(populationValueNum);
+        var obesityRate = Number(obesityValueNum) / Number(populationValueNum);
+        var weightlossRate = Number(weightlossValueNum) / Number(populationValueNum);
+
+        //Convert imported data to numeric type and calculate percentage of total population
+        document.getElementById("undernourishmentRate").innerHTML = (undernourishmentRate*100).toFixed(2) + "%";
+        document.getElementById("obesityRate").innerHTML = (obesityRate*100).toFixed(2) + "%";
+        document.getElementById("weightlossRate").innerHTML = (weightlossRate*100).toFixed(2) + "%";
+
 	});
 
 	function getCountryCode(countryName) {
+        //Using the existed JSON file to utilize country codes
     var countryCodes = {
         "Afghanistan": "AF",
     "Åland Islands": "AX",
@@ -486,18 +501,18 @@
 function transformDataForPopulation(realTimeData) {
     var transformedData = { data: {}, applyData: 'worldShare', values: {} };
 
-    // 데이터 구조 설정
+    //Setting up country data structure 
     transformedData.data = {
+        // Data field definition
         area: {
             name: 'Land Area (Km²)',
             format: '{0} km<sup>2</sup>',
             thousandSeparator: ','
         },
         population: {
-            name: 'Population (2023)',
+            name: 'Population (2024)',
             thousandSeparator: ','
         },
-        // 나머지 데이터 필드 정의
         yearlyChange: { name: 'Yearly Change' },
         netChange: { name: 'Net Change' },
         migrants: { name: 'Migrants (net)' },
@@ -512,7 +527,7 @@ function transformDataForPopulation(realTimeData) {
         }
     };
 
-    // 실시간 데이터를 지정된 형식으로 변환
+    //Convert real-time data to a usable format
     realTimeData.result.forEach(function (countryData) {
         var countryCode = getCountryCode(countryData["Country (or dependency)"]);
         if (countryCode) {
@@ -533,17 +548,17 @@ function transformDataForPopulation(realTimeData) {
     return transformedData;
 }
 
+//Functions that behave like the previous ones, but with data related to undernourishment
 function transformDataForUN(realTimeData) {
     var transformedData = { data: {}, applyData: 'percentPOP', values: {} };
 
-    // 데이터 구조 설정
     transformedData.data = {
         UNpopulation: {
             name: 'Undernourished People',
             thousandSeparator: ','
         },
         UNpopulation18: {
-            name: 'Undernourished People(2018)',
+            name: 'Population (2018)',
             thousandSeparator: ','
         },
         percentPOP: {
@@ -554,7 +569,6 @@ function transformDataForUN(realTimeData) {
         }
     };
 
-    // 실시간 데이터를 지정된 형식으로 변환
     realTimeData.result.forEach(function (countryData) {
         var countryCode = getCountryCode(countryData["Country"]);
         if (countryCode) {
@@ -569,7 +583,7 @@ function transformDataForUN(realTimeData) {
     return transformedData;
 }
 
-// 실시간 데이터를 가져와서 svgMap에 사용
+// Get real-time country-specific data and use it to make map
 fetchData("http://127.0.0.1:8000/table/world-population/population-by-country", function(result) {
     var dataForMap = transformDataForPopulation(result);
     new svgMap({
@@ -584,7 +598,7 @@ fetchData("http://127.0.0.1:8000/table/world-population/population-by-country", 
     });
 });
 
-
+// Get real-time undermourishment data and use it to make map
 fetchData("http://127.0.0.1:8000/table/undernourishment", function(result) {
     var dataForMap = transformDataForUN(result);
     new svgMap({
