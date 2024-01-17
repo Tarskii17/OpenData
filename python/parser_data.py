@@ -6,14 +6,14 @@ import json
 
 
 async def parse(page, dictionary, json_column):
-    # Ждем, пока данные загрузятся (может потребоваться настроить время ожидания)
+    # Waiting for the data to load (you may need to adjust the waiting time)
     await page.waitForSelector('.maincounter-number')
 
     await asyncio.sleep(1)
-    # Извлекаем элементы с классом "maincounter-number"
+    # Extracting elements with the "maincounter-number" class
     main_counter_elements = await page.querySelectorAll('.maincounter-number')
 
-    # Итерируемся по найденным элементам и извлекаем данные
+    # Iterate over the found elements and extract the data
     text = await page.evaluate('(element) => element.textContent', main_counter_elements[0])
     dictionary[json_column] = text.strip()
 
@@ -22,13 +22,13 @@ async def parse_table(url):
     response = requests.get(url)
 
     if response.status_code == 200:
-        # Используем BeautifulSoup для парсинга HTML-кода страницы
+        # We use BeautifulSoup to parse the HTML code of the page
         soup = BeautifulSoup(response.text, 'html.parser')
 
-        # Находим таблицу на странице (в данном случае, используем первую таблицу)
+        # Find the table on the page (in this case, use the first table)
         table = soup.find_all('table')[0]
 
-        # Используем pandas для чтения HTML-таблицы
+        # Using pandas to read HTML tables
         df = pd.read_html(str(table))[0].drop(columns=['#']).to_json(orient='records')
         
         parsed = json.loads(df)
@@ -37,4 +37,4 @@ async def parse_table(url):
         return parsed
 
     else:
-        print("Ошибка при получении данных. Код статуса:", response.status_code)
+        print("An error occurred while receiving the data. Status code:", response.status_code)

@@ -8,7 +8,7 @@ app = FastAPI()
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # 모든 도메인에서의 요청을 허용하도록 설정 (보안상에 주의)
+    allow_origins=["*"],  # Set to allow requests from all domains (security precautions)
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
